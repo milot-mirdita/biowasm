@@ -34,3 +34,6 @@
 	path = tools/fastp/src
 	url = https://github.com/OpenGene/fastp.git
 
+[submodule "tools/rust-bio-tools/src"]
+	path = tools/rust-bio-tools/src
+	url = https://github.com/rust-bio/rust-bio-tools.git
