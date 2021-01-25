@@ -103,8 +103,10 @@ httpd = socketserver.TCPServer(('', 80), handler)
 httpd.serve_forever()
 EOF
 chmod +x server.py
+# Exit container
+^D
 # Launch the web server
-python3.7 /src/server.py &
+docker exec -d wasm bash -c "python3.7 /src/server.py"
 ```
 
 
