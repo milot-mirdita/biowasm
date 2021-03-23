@@ -1,0 +1,63 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1a677e30..d1f3f205 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -94,7 +94,7 @@ if (NATIVE_ARCH AND (MMSEQS_ARCH STREQUAL ""))
+         message(WARNING "CPU without native SIMD instructions. Performance will be bad.")
+     endif ()
+     if (EMSCRIPTEN)
+-        set(MMSEQS_ARCH "-msimd128 -s WASM=1 -s ASSERTIONS=1")
++        set(MMSEQS_ARCH "-s WASM=1 -s ASSERTIONS=1")
+     elseif (X86 OR X64)
+         include(CheckSSEFeatures)
+         if (NOT HAVE_SSE4_1_EXTENSIONS)
+diff --git a/src/commons/DBReader.h b/src/commons/DBReader.h
+index 87b04f76..17c32ba0 100644
+--- a/src/commons/DBReader.h
++++ b/src/commons/DBReader.h
+@@ -242,7 +242,7 @@ public:
+     static const unsigned int USE_INDEX      = 0;
+     static const unsigned int USE_DATA       = 1;
+     static const unsigned int USE_WRITABLE   = 2;
+-    static const unsigned int USE_FREAD      = 4;
++    static const unsigned int USE_FREAD      = 0;
+     static const unsigned int USE_LOOKUP     = 8;
+     static const unsigned int USE_LOOKUP_REV = 16;
+ 
+diff --git a/src/commons/MemoryMapped.cpp b/src/commons/MemoryMapped.cpp
+index 81d00323..edd8be42 100644
+--- a/src/commons/MemoryMapped.cpp
++++ b/src/commons/MemoryMapped.cpp
+@@ -144,12 +144,16 @@ bool MemoryMapped::open(const std::string& filename, size_t mappedBytes, CacheHi
+     _filesize = statInfo.st_size;
+ #endif
+ 
++#if defined(__EMSCRIPTEN__)
++    _mappedView = (void*)malloc(_filesize * sizeof(char));
++    read(_file, _mappedView, _filesize * sizeof(char));
++#else
+     // initial mapping
+     remap(0, mappedBytes);
+ 
+     if (!_mappedView)
+         return false;
+-
++#endif
+     openned = true;
+     // everything's fine
+     return true;
+@@ -162,10 +166,14 @@ void MemoryMapped::close()
+     // kill pointer
+     if (_mappedView)
+     {
++#if defined(__EMSCRIPTEN__)
++        free(_mappedView);
++#else
+ #ifdef _MSC_VER
+         ::UnmapViewOfFile(_mappedView);
+ #else
+         ::munmap(_mappedView, _filesize);
++#endif
+ #endif
+         _mappedView = NULL;
+     }

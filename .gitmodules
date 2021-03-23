@@ -37,3 +37,7 @@
 [submodule "tools/ssw/src"]
 	path = tools/ssw/src
 	url = https://github.com/mengyao/Complete-Striped-Smith-Waterman-Library.git
+
+[submodule "tools/mmseqs2/src"]
+	path = tools/mmseqs2/src
+	url = https://github.com/soedinglab/MMseqs2.git

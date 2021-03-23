@@ -13,6 +13,7 @@ A repository of genomics tools, compiled from C/C++ to WebAssembly so they can r
 * [wgsim](tools/wgsim)
 * [bhtsne](tools/bhtsne)
 * [seq-align](tools/seq-align)
+* [MMseqs2](tools/mmseqs2)
 
 
 ## How it works

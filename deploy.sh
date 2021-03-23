@@ -31,6 +31,8 @@ TOOLS=$(cat <<EOF
 	ssw          1.2.4         ad452ea
 
 	wgsim        2011.10.17    a12da33
+
+	MMseqs2      13-45111      13-45111
 EOF
 )
 
