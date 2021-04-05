@@ -1,10 +1,13 @@
 # Commonly used emcc compilation variables
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 
 EM_FLAGS_BASE=$(cat <<EOF
     -s USE_ZLIB=1
     -s INVOKE_RUN=0
     -s FORCE_FILESYSTEM=1
     -s EXTRA_EXPORTED_RUNTIME_METHODS=["callMain"]
+    -include ${DIR}/execvp.h
+    --js-library ${DIR}/execvp.js
     -lworkerfs.js
 EOF
 )
